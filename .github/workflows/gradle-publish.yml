@@ -20,8 +20,9 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
+      id-token: write
 
     steps:
     - uses: actions/checkout@v4
@@ -45,14 +46,11 @@ jobs:
         name: adyeshach
         path: ${{ github.workspace }}/plugin/build/output/libs/*.jar
         
-    - name: Create a Release in a GitHub Action
-      uses: comnoco/create-release-action@v2.0.5
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+    - name: Create GitHub Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: |
-          Plugin Jar 🍔
-        draft: false
-        prerelease: false
+        files: ${{ github.workspace }}/plugin/build/output/libs/*.jar
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+
