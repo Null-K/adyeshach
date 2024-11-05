@@ -51,6 +51,12 @@ subprojects {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    // 新增内容
+    tasks.jar {
+        archiveBaseName.set("adyeshach")
+        destinationDirectory.set(file("$buildDir/output/libs"))
+    }
 }
 
 gradle.buildFinished {
