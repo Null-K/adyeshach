@@ -40,4 +40,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: adyeshach
-        path: build/output/libs/*.jar
+        path: ${{ github.workspace }}/plugin/build/output/libs/*.jar
