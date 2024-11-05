@@ -50,6 +50,7 @@ jobs:
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: jar
         files: ${{ github.workspace }}/plugin/build/output/libs/*.jar
       env:
         GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
