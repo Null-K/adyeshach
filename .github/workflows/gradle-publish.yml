@@ -44,12 +44,3 @@ jobs:
       with:
         name: adyeshach
         path: ${{ github.workspace }}/plugin/build/output/libs/*.jar
-
-    - name: Create GitHub Release
-      id: create_release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v${{ github.sha }}
-        files: ${{ github.workspace }}/plugin/build/output/libs/*.jar
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
