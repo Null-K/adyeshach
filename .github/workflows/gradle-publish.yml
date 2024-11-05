@@ -11,7 +11,7 @@ on:
   push:
     branches:
       - 2.0
-  workflow_dispatch:
+  #workflow_dispatch:
   release:
     types: [created]
 
@@ -45,12 +45,20 @@ jobs:
       with:
         name: adyeshach
         path: ${{ github.workspace }}/plugin/build/output/libs/*.jar
+
+    - name: Get the jar filename
+      id: get_jar_name
+      run: |
+        JAR_FILE=$(ls ${{ github.workspace }}/plugin/build/output/libs/*.jar | head -n 1)
+        JAR_FILENAME=$(basename "$JAR_FILE" .jar)
+        echo "JAR_FILENAME=$JAR_FILENAME" >> $GITHUB_ENV
+      continue-on-error: false
         
     - name: Create GitHub Release
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.run_id }}
+        tag_name: ${{ env.JAR_FILENAME }}
         files: ${{ github.workspace }}/plugin/build/output/libs/*.jar
       env:
         GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
