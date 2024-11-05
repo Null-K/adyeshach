@@ -4,12 +4,4 @@
 # Adyeshach
 Adyeshach 是免费的，但我们不提供 jar 文件，你可以通过以下步骤自行构建插件。
 
-**Windows 平台**
-```shell
-gradlew.bat clean build
-```
-
-**macOS/Linux 平台**
-```shell
-./gradlew clean build
-```
+此 Fork 新增了自动构建发布，其余内容与原版存储库无异。
