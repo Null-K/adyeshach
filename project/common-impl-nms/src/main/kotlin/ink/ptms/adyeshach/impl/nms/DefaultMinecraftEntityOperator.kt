@@ -78,6 +78,8 @@ class DefaultMinecraftEntityOperator : MinecraftEntityOperator {
         }
         // 发送数据包
         packetHandler.sendPacket(player, packet)
+        // 同步头部朝向
+        updateHeadRotation(player, entityId, location.yaw)
     }
 
     override fun updateEntityLook(player: List<Player>, entityId: Int, yaw: Float, pitch: Float, onGround: Boolean) {
