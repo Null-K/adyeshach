@@ -2,7 +2,7 @@ rootProject.name = "Adyeshach"
 
 include("plugin")
 include("project:api-data-serializer")
-include("project:api-alkaid-mongodb")
+//include("project:api-alkaid-mongodb")
 include("project:common")
 include("project:common-impl")
 include("project:common-impl-nms")

@@ -10,6 +10,7 @@ import ink.ptms.adyeshach.core.entity.EntityTypes
 import ink.ptms.adyeshach.core.entity.type.AdyHuman
 import ink.ptms.adyeshach.core.entity.type.minecraftVersion
 import ink.ptms.adyeshach.core.event.AdyeshachGameProfileGenerateEvent
+import ink.ptms.adyeshach.core.event.AdyeshachPlayerUUIDGenerateEvent
 import ink.ptms.adyeshach.core.util.getEnum
 import ink.ptms.adyeshach.impl.util.ifTrue
 import org.bukkit.entity.Player
@@ -32,8 +33,11 @@ import java.util.*
 abstract class DefaultHuman(entityTypes: EntityTypes) : DefaultEntityLiving(entityTypes), AdyHuman {
 
     /** 玩家 UUID */
-    val pid: UUID
-        get() = normalizeUniqueId
+    val pid: UUID by lazy {
+        val event = AdyeshachPlayerUUIDGenerateEvent(this, normalizeUniqueId)
+        event.call()
+        event.uniqueId
+    }
 
     /** 是否已经生成 */
     internal var spawned = false
@@ -76,15 +80,11 @@ abstract class DefaultHuman(entityTypes: EntityTypes) : DefaultEntityLiving(enti
                 }
                 // 更新状态
                 submit(delay = 5) {
-                    if (isDie) {
-                        die(viewer = viewer)
-                    }
-                    if (isSleepingLegacy) {
-                        setSleeping(true)
-                    }
-                    if (isHideFromTabList) {
-                        removePlayerInfo(viewer)
-                    }
+                    if (isDie) die(viewer = viewer)
+                    if (isSleepingLegacy) setSleeping(true)
+                }
+                submit(delay = 10) {
+                    if (isHideFromTabList) removePlayerInfo(viewer)
                 }
                 spawned = true
             }

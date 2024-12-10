@@ -16,11 +16,6 @@ import taboolib.common.util.resettableLazy
  * @author 坏黑
  * @since 2023/1/10 20:09
  */
-@RuntimeDependency(
-    value = "!org.mongodb:mongo-java-driver:3.12.11",
-    test = "!com.mongodb_3_12_11.client.MongoDatabase",
-    relocate = ["com.mongodb", "com.mongodb_3_12_11", "org.bson", "org.bson_3_12_11"]
-)
 @Deprecated("1.0 保留功能")
 object EntityStorage {
 
@@ -37,7 +32,6 @@ object EntityStorage {
     /** 数据库实例 */
     val database by resettableLazy {
         when (databaseType) {
-            "MONGO", "MONGODB" -> EntityStoreSourceMongoDB()
             "LOCAL" -> EntityStoreSourceLocal()
             else -> EntityStoreSourceNull()
         }
