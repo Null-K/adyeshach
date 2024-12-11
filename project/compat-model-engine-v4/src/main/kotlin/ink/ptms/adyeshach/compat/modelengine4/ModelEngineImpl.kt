@@ -25,7 +25,7 @@ import taboolib.common.util.unsafeLazy
  * @since 2022/6/19 21:58
  */
 @Suppress("SpellCheckingInspection")
-interface DefaultModelEngine : ModelEngine {
+internal interface DefaultModelEngine : ModelEngine {
 
     override fun showModelEngine(viewer: Player): Boolean {
         if (isModelEngineHooked) {
@@ -60,8 +60,13 @@ interface DefaultModelEngine : ModelEngine {
 
                 // 创建模型
                 val model = ModelEngineAPI.getOrCreateModeledEntity(normalizeUniqueId) { entity }
+                model.setSaved(true)
                 model.isBaseEntityVisible = false
-                model.setSaved(false)
+                // 私有模型兼容
+                if (!isPublic()) {
+                    entity.isDetectingPlayers = false
+                    forViewers { t -> entity.setForceViewing(t, true) }
+                }
 
                 // 没有模型
                 val useStateMachine = true

@@ -13,7 +13,7 @@ import taboolib.common.platform.Awake
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
 
-object ModelEngineEvents {
+internal object ModelEngineEvents {
 
     @Awake(LifeCycle.ENABLE)
     fun init() {

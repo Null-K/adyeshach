@@ -12,7 +12,7 @@ import org.bukkit.Location
  * @author 坏黑
  * @since 2024/1/14 22:30
  */
-class EntityModeled(val entity: EntityInstance) : Dummy<EntityInstance>(entity.index, entity.normalizeUniqueId, entity) {
+internal class EntityModeled(val entity: EntityInstance) : Dummy<EntityInstance>(entity.index, entity.normalizeUniqueId, entity) {
 
     override fun getLocation(): Location {
         return entity.getLocation()
