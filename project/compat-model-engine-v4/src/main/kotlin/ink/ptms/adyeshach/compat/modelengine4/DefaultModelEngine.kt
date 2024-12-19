@@ -2,8 +2,6 @@ package ink.ptms.adyeshach.compat.modelengine4
 
 import com.ticxo.modelengine.api.ModelEngineAPI
 import com.ticxo.modelengine.api.model.bone.BoneBehaviorTypes
-import com.ticxo.modelengine.core.animation.handler.PriorityHandler
-import com.ticxo.modelengine.core.animation.handler.StateMachineHandler
 import com.ticxo.modelengine.v1_20_R3.NMSHandler_v1_20_R3
 import ink.ptms.adyeshach.core.Adyeshach
 import ink.ptms.adyeshach.core.AdyeshachEntityTypeRegistry
@@ -28,88 +26,47 @@ import taboolib.common.util.unsafeLazy
 internal interface DefaultModelEngine : ModelEngine {
 
     override fun showModelEngine(viewer: Player): Boolean {
-        if (isModelEngineHooked) {
+        if (isModelEngineHooked && modelEngineName.isNotBlank()) {
             // 初始化模型
-            if (modelEngineName.isNotBlank() && modelEngineUniqueId == null) {
-                refreshModelEngine()
+            if (modelEngineUniqueId == null) {
+                createModel()
+            } else {
+                getDummy()?.setForceViewing(viewer, true)
             }
+            return true
         }
-        return true
+        return false
     }
 
     override fun hideModelEngine(viewer: Player): Boolean {
-        return true
+        if (isModelEngineHooked && modelEngineName.isNotBlank() && modelEngineUniqueId != null) {
+            getDummy()?.setForceViewing(viewer, false)
+            return true
+        }
+        return false
     }
 
     override fun refreshModelEngine(): Boolean {
         if (isModelEngineHooked) {
             this as DefaultEntityInstance
-
             // 创建模型
             if (modelEngineName.isNotBlank()) {
+                // 初始化模型
                 modelEngineUniqueId = normalizeUniqueId
-
-                ModelEngineAPI.getModeledEntity(normalizeUniqueId)?.destroy()
-
-                // 先销毁原版实体，再创建模型
-                despawn()
-
-                // 创建代理实体
-                val entity = EntityModeled(this)
-                entity.syncLocation(getLocation())
-
-                // 创建模型
-                val model = ModelEngineAPI.getOrCreateModeledEntity(normalizeUniqueId) { entity }
-                model.setSaved(true)
-                model.isBaseEntityVisible = false
-                // 私有模型兼容
-                if (!isPublic()) {
-                    entity.isDetectingPlayers = false
-                    forViewers { t -> entity.setForceViewing(t, true) }
-                }
-
-                // 没有模型
-                val useStateMachine = true
-                val activeModel = ModelEngineAPI.createActiveModel(modelEngineName, null) {
-                    if (useStateMachine) StateMachineHandler(it) else PriorityHandler(it)
-                }
-
-                val scale = 1.0
-                val hitboxScale = 1.0
-                val doDamageTint = true
-                val lockPitch = false
-                val lockYaw = false
-                val initRenderer = true
-                val showHitbox = true
-                val showShadow = true
-                val hitbox = true
-
-                activeModel.setScale(scale)
-                activeModel.setHitboxScale(hitboxScale)
-                activeModel.setCanHurt(doDamageTint)
-                activeModel.isLockPitch = lockPitch
-                activeModel.isLockYaw = lockYaw
-                activeModel.setAutoRendererInitialization(initRenderer)
-                activeModel.isHitboxVisible = showHitbox
-                activeModel.isShadowVisible = showShadow
-                model.addModel(activeModel, hitbox)
-
-                // 更新名称
-                updateModelEngineNameTag()
+                createModel()
             }
             // 销毁模型
-            else {
-                ModelEngineAPI.getModeledEntity(normalizeUniqueId)?.destroy()
+            else if (ModelEngineAPI.removeModeledEntity(normalizeUniqueId) != null) {
                 respawn()
             }
+            return true
         }
         return false
     }
 
     override fun updateModelEngineNameTag() {
         this as DefaultEntityInstance
-        val modeledEntity = ModelEngineAPI.getModeledEntity(modelEngineUniqueId ?: return) ?: return
-        modeledEntity.models.values.forEach { model ->
+        getModeledEntity()?.models?.values?.forEach { model ->
             model.getBone("nametag").flatMap { it.getBoneBehavior(BoneBehaviorTypes.NAMETAG) }.ifPresent { nameTag ->
                 // 名称可见
                 if (isCustomNameVisible()) {

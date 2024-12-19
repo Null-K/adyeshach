@@ -80,4 +80,8 @@ abstract class DefaultEntityBase(
      * 是否为无效类型
      */
     override val isInvalid = Adyeshach.api().getEntityTypeRegistry().getEntityFlags(entityType).contains("INVALID")
+
+    override fun toString(): String {
+        return "$entityType($id)"
+    }
 }
