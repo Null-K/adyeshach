@@ -19,7 +19,7 @@ subprojects {
             install(BukkitNMSUtil)
             install(MinecraftEffect, MinecraftChat)
         }
-        version { taboolib = "6.2.1-f095116" }
+        version { taboolib = "6.2.1-df22fb1" }
     }
     repositories {
         maven { url = uri("https://repo.spongepowered.org/maven") }
