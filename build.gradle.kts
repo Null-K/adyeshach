@@ -18,10 +18,12 @@ subprojects {
             install(Bukkit, BukkitUI, BukkitNavigation, BukkitUtil, BukkitHook)
             install(BukkitNMSUtil)
             install(MinecraftEffect, MinecraftChat)
+            // repoTabooLib = project.repositories.mavenLocal().url.toString()
         }
-        version { taboolib = "6.2.1-df22fb1" }
+        version { taboolib = "6.2.2" }
     }
     repositories {
+        mavenLocal()
         maven { url = uri("https://repo.spongepowered.org/maven") }
         mavenCentral()
     }

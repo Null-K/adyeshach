@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 dependencies {
     compileOnly("org.joml:joml:1.10.2")
     compileOnly("ink.ptms.core:v12004:12004:mapped")
@@ -10,11 +12,6 @@ dependencies {
     compileOnly(project(":project:common"))
     compileOnly(project(":project:common-impl-nms"))
     compileOnly(project(":project:api-data-serializer"))
-}
-
-configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
 }
 
 taboolib { subproject = true }

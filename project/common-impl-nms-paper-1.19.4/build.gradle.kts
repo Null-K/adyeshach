@@ -3,9 +3,9 @@ dependencies {
     compileOnly(project(":project:common-impl-nms"))
 }
 
-configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
+//configure<JavaPluginConvention> {
+//    sourceCompatibility = JavaVersion.VERSION_17
+//    targetCompatibility = JavaVersion.VERSION_17
+//}
 
 taboolib { subproject = true }
